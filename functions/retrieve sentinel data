@@ -1,0 +1,117 @@
+import os
+import requests
+import pandas as pd
+import geopandas as gpd
+from shapely.geometry import shape
+from datetime import date, timedelta
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Set up your Copernicus credentials directly
+copernicus_user = "eugenio.serafino@epfl.ch"  # Replace with your email
+copernicus_password = "EugenioCopernicus.1"  # Replace with your password
+
+# Define the area of interest as WKT format (Example is a larger bounding box)
+ft = "POLYGON((12.0 45.0, 12.0 46.0, 13.0 46.0, 13.0 45.0, 12.0 45.0))"  # Replace with your AOI coordinates
+
+# Define the data collection
+data_collection = "SENTINEL-2"
+
+# Define the date range (expanding to the past 7 days)
+today = date.today()
+today_string = today.strftime("%Y-%m-%d")
+days_before_today = 7
+start_date = today - timedelta(days=days_before_today)
+start_date_string = start_date.strftime("%Y-%m-%d")
+
+def get_keycloak_token(username: str, password: str) -> str:
+    """Retrieve an access token using Copernicus Data Space's Keycloak authentication."""
+    data = {
+        "client_id": "cdse-public",
+        "username": username,
+        "password": password,
+        "grant_type": "password",
+    }
+    response = requests.post(
+        "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token",
+        data=data,
+    )
+    response.raise_for_status()
+    return response.json()["access_token"]
+
+# Retrieve data from Copernicus Data Space
+def fetch_copernicus_data():
+    # Construct the API query URL
+    query_url = (
+        f"https://catalogue.dataspace.copernicus.eu/odata/v1/Products?"
+        f"$filter=Collection/Name eq '{data_collection}' "
+        f"and OData.CSC.Intersects(area=geography'SRID=4326;{ft}') "
+        f"and ContentDate/Start gt {start_date_string}T00:00:00.000Z "
+        f"and ContentDate/Start lt {today_string}T00:00:00.000Z&$top=50"
+    )
+
+    # Perform the API request
+    response = requests.get(query_url)
+    if response.status_code != 200:
+        print("Failed to fetch data:", response.status_code, response.text)
+        return None
+
+    json_data = response.json()
+    data_frame = pd.DataFrame.from_dict(json_data.get("value", []))
+    if data_frame.empty:
+        print("No data found for the specified criteria.")
+        return None
+
+    # Convert data to GeoDataFrame and filter for L2A products only
+    data_frame["geometry"] = data_frame["GeoFootprint"].apply(shape)
+    gdf = gpd.GeoDataFrame(data_frame).set_geometry("geometry")
+    gdf = gdf[~gdf["Name"].str.contains("L1C")]  # Remove L1C products
+    print(f"Total L2A tiles found: {len(gdf)}")
+    
+    return gdf
+
+# Download tiles function with multithreading
+def download_tile(feat, session, keycloak_token):
+    product_id = feat["Id"]
+    product_name = feat["Name"]
+    product_identifier = feat["Name"].split(".")[0]
+    download_url = f"https://catalogue.dataspace.copernicus.eu/odata/v1/Products({product_id})/$value"
+
+    # Follow redirects for the download
+    response = session.get(download_url, allow_redirects=False)
+    while response.status_code in (301, 302, 303, 307):
+        download_url = response.headers["Location"]
+        response = session.get(download_url, allow_redirects=False)
+
+    # Final download
+    file_response = session.get(download_url, verify=False, allow_redirects=True)
+    file_path = f"{product_identifier}.zip"
+
+    # Save the file
+    with open(file_path, "wb") as file:
+        print(f"Downloading {product_name} as {file_path}")
+        file.write(file_response.content)
+
+def download_tiles(gdf, username, password):
+    if gdf is None or gdf.empty:
+        print("No data available to download.")
+        return
+
+    keycloak_token = get_keycloak_token(username, password)
+    with requests.Session() as session:
+        session.headers.update({"Authorization": f"Bearer {keycloak_token}"})
+
+        # Use ThreadPoolExecutor for parallel downloads
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = [
+                executor.submit(download_tile, feat, session, keycloak_token)
+                for _, feat in gdf.iterrows()
+            ]
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except Exception as e:
+                    print("Error downloading a tile:", e)
+
+# Run the data fetch and download process
+gdf = fetch_copernicus_data()
+download_tiles(gdf, copernicus_user, copernicus_password)

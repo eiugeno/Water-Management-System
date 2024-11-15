@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ee-eugenioserafino01",
+  "private_key_id": "dca7dda5348b4c2cc5f62f3392a779b17b07edca",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDPnd3DYjkSzhRX\nE091afsN1xbkOaAzaLUiexg2DgDWE3U//0Sh3sMYlAz73hR00ZzjL1VCbP5UHv8L\nLuKxztLDBpuj+62TAretwIj5djNAyKWFGFHJ9sUAl02ywEGiSu4BTfu9HGxzexkQ\n5laoSbhwYJI0zdfhOFhpXMI4+hYJrHyRlJLB5HYsEvAgcdbbJDjl+jptbMVqhB7U\nN4p2e9aQBXefV5O++y+epO0z4QYR8LUSyjfXrcavYna1IoLtPwQKKbHwPvGwaQit\n1vrZiv10KdefAredlH6r9EMx1BFmRboKdUgMljQoQcFLBkQ/358JbZQlwzR84nhv\nQrJoh1y5AgMBAAECggEAQxUfm+tnRIe4s7/mCyqQt1KZr2ldNW8uI7OBSanxpDoK\nRwDcdK7s+8qOfW0uz+YQmqlnE3zzGkwfnUXrcodAu0otzOjblyYoIiiVOYFzIwoR\nzTTj7G1jDwNUVB7htiYey+YeImcGNbP/D+JU+rBDO3BAnXYrPDa//l891DoeF8aB\nxavNdgQp+zH3BkBRcESy/AbWS+OIrLcZ2cBhB2jINVK+tB6MYKJhaz5Y7/UbMVMF\nEXKr9a+u1AVjsmHoXrqLk+aHrXJySlTNLXKB4QO6aK9KoR95qsAMKeeRYgYduQjy\nEbweD3+neUcGyGtzOZdNep3Sw7aAan0QVH2wUonLZwKBgQD6ZnUxRBzopV4nEnma\nsogekVs9ZTcLjc+Wv/ws4GRAjP/p8o2imIxoWkC5+jRKFntPcfhbtiumip5M+W/o\n56idvExZy2lfNdWH3OXJpr43KELyja5VHBFmV1MF+Ch5z+AM1AQoJ9tUTXdon9uj\nglOTTsTvfxISzbWnsmaj5xXPzwKBgQDUQnjxoUEkdu+ohnqo3zUBz3hXMUFthsCB\nXwU83NwnIdgjnCBkxXda7qG4mS/WIe/MP/TMq5L1vlRseDzALjWEZTtylXIoZxY+\njpZGj2pzu5HXfgZIkkJpWTutpmJ1yiTdJSbX7f5y3oB6qKMSwWWvZy1w64OPEdZV\n811X6oFk9wKBgQCRS5p899T+edZkPagqR6YMdrPGsFB8d9EY3FXrhFkny6lDiub8\njiAK/TPJtpFY3Cq5Mpy2OsKhZJXufF6feqywum5jPFDsWkSJDXiYxhRh1Q7jx6p8\n4EiIZeta72AtLp4HU48F7fqqtDixkPDVs+3i8DX98nH+Tzc1E6PTP2e8qQKBgQDP\nV9uzFbV/vFsiAbPCUMAD87n3WpsyNYbJGZwRNyIra8kqB/Iw3iBYiHEb1TBAecg4\nemVUpWmaeoEXsGCPztPib80hglEQnJrDIyAy7xeq1BiEK4xRyeXr6Qn9+GGH9J4M\nFKWcGtULOsTAjQk3YgpFzIE8JCPQVzlLnr6ZCe+6QwKBgHpHQuI0qJNrBQtK+/RG\nWZlQqoCXj9XVRp1iRdt9XbF55Z4t6Gk9wjcqMVvjIl4u2y5aWiWwaD8UOlw6pqo4\n7r+P/Np5eeNDfc3C5azzP2uK/1a7AFIGvxSu07zzE5T46zxvPwKSzRFUYlH+p1fo\nf8TkwfcowdYgLJAfZ3cGoegM\n-----END PRIVATE KEY-----\n",
+  "client_email": "earth-engine-access@ee-eugenioserafino01.iam.gserviceaccount.com",
+  "client_id": "107861523335599382816",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/earth-engine-access%40ee-eugenioserafino01.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
